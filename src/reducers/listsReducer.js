@@ -1,7 +1,7 @@
 import { CONSTANTS } from "../actions";
 
-let listID = 2;
-let cardID = 5;
+let listID = 7;
+let cardID = 13;
 
 const initialState = [
   {
@@ -10,7 +10,12 @@ const initialState = [
     cards: [
       {
         id: `card-${0}`,
+        title: "B2B",
         text: "Define project scope",
+        storyPoints: 5,
+        priority: "Low",
+        assignee: "Nikola",
+        dueDate: "01-02-2024"
       },
       {
         id: `card-${1}`,
@@ -101,6 +106,8 @@ const initialState = [
 ];
 
 
+
+
 const listReducer = (state = initialState, action) => {
   switch (action.type) {
     case CONSTANTS.ADD_LIST:
@@ -127,8 +134,8 @@ const listReducer = (state = initialState, action) => {
         });
         return newState;
       }
-       
-      case CONSTANTS.EDIT_CARD: {
+     
+/*       case CONSTANTS.EDIT_CARD1: {
         const newState = state.map((list) => {
           if (list.id === action.payload.listID) {
             return {
@@ -138,6 +145,7 @@ const listReducer = (state = initialState, action) => {
                   return {
                     ...card,
                     text: action.payload.newText,
+                    title: action.payload.newTitle,
                   };
                 } else {
                   return card;
@@ -149,18 +157,46 @@ const listReducer = (state = initialState, action) => {
           }
         });
         return newState;
-      }
+      } */
+     
+      case CONSTANTS.EDIT_CARD: {
+        const { listID, cardID, newText, newTitle } = action.payload;
       
+        return state.map((list) =>
+          list.id === listID
+            ? {
+                ...list,
+                cards: list.cards.map((card) =>
+                  card.id === cardID
+                    ? { ...card, text: newText, title: newTitle }
+                    : card
+                ),
+              }
+            : list
+        );
+      }
 
     case CONSTANTS.ADD_CARD: {
+
+      if(!action.payload.priority){
+        action.payload.priority = "Low"
+      }
+
+      if(!action.payload.assignee){
+        action.payload.priority = "No"
+      }
+
+
       const newCard = {
         text: action.payload.text,
+        title: action.payload.title,
+        priority: action.payload.priority,
+        storyPoints: action.payload.storyPoints,
+        dueDate: action.payload.dueDate,
+        assignee : action.payload.assignee,
         id: `card-${cardID}`,
       };
       cardID += 1;
-
-      console.log("action received", action);
-
       const newState = state.map((list) => {
         if (list.id === action.payload.listID) {
           return {

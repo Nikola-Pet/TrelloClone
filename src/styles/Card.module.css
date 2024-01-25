@@ -1,53 +1,324 @@
-.card {
+.flexRow{
+  display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card {
+  width: 293px;
+  background-color: #ccc;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   border: 1px solid #000;
   border-radius: 10px;
   margin-bottom: 8px;
   margin-left: 4px;
-  width: 288px;
-  min-height: 50px;
-  display: flex;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 }
 
 .text {
-    display: table-cell;
-    vertical-align: middle;
-    margin-left: 13px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    width: 250px;
-    height: auto;
-    word-wrap: break-word;
-    line-height: 20px;
-    vertical-align: middle;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-left: 13px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  width: 250px;
+  height: auto;
+  word-wrap: break-word;
+  line-height: 20px;
+  vertical-align: middle;
+}
+
+.selectPriority{
+  padding: 2px 2px 2px 6px;
+  margin: 4px auto 4px auto;
+  width: 140px;
+  border: 0;
+  word-wrap: break-word;
+  line-height: 20px;
+  background: transparent;
+  resize: none;
+  overflow: auto;
+  appearance: none;
+  cursor: pointer;
+  font-family:'Times New Roman';
+
+
+  box-shadow: inset 2px 2px 5px #00000054, inset -2px -2px 5px #00000054;
+  border-radius: 5px;
+  max-height: 200px;
+ 
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.selectOption  {
+  padding: 10px;
+  background-color: #ccc;
+  color: #333;
+  font-family:'Times New Roman';
+  text-align: center;
+}
+
+.selectOption:hover {
+  background-color: #ccc; /* Siva boja za hover */
+}
+.inputDate{
+  padding: 2px 2px 2px 6px;
+  margin: 4px auto 4px auto;
+  width: 132px;
+  line-height: 20px;
+  background: transparent;
+  box-shadow: inset 2px 2px 5px #00000054, inset -2px -2px 5px #00000054;
+  border-radius: 5px;
+  border: 0;
+  text-align: center;
+
+  &:focus-visible {
+    outline: none;}
+}
+
+.inputStoryPoints{
+  padding: 2px 2px 2px 6px;
+  margin: 4px auto 4px auto;
+  width: 132px;
+  line-height: 20px;
+  background: transparent;
+  box-shadow: inset 2px 2px 5px #00000054, inset -2px -2px 5px #00000054;
+  border-radius: 5px;
+  border: 0;
+  text-align: center;
+
+  &:focus-visible {
+    outline: none;
   }
 
-  .textInput{
-    padding-top: 2px;
-    margin: 0 auto;
-    min-width: 248px;
-    max-width: 248px;
-    width: auto;
-    height: auto;
-    word-wrap: break-word;
-    line-height: 20px;
-    background: transparent;
-    
+}
+
+.inputDescription {
+  padding: 2px 2px 2px 6px;
+  margin: 4px auto 4px auto;
+  min-width: 238px;
+  border: 0;
+  word-wrap: break-word;
+  line-height: 20px;
+  background: transparent;
+  resize: none;
+  overflow: auto;
+
+  box-shadow: inset 2px 2px 5px #00000054, inset -2px -2px 5px #00000054;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow: auto; /* Dodano za omogućavanje scroll-a */
+
+  /* Stilizacija scrollbar-a za WebKit (Chrome, Safari) */
+  scrollbar-width: thin;
+  scrollbar-color: #666666 transparent;
+
+  &:focus-visible {
+    outline: none;
   }
+}
+
+.textInput, .inputDescription {
+  padding: 2px 2px 2px 6px;
+  margin: 4px auto 4px auto;
+  min-width: 238px;
+  border: 0;
+  word-wrap: break-word;
+  line-height: 20px;
+  background: transparent;
+  resize: none;
+  overflow: auto;
+
+  &:focus-visible {
+    outline: none;
+  }
+}
 
 .icons {
   width: 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  align-self: flex-end;
+  justify-content: flex-start;
+  align-self: flex-start;
 }
 
 .icon {
-    height: 20px;
-    padding-top: 5px;
-    opacity: 0.5;
+  height: 20px;
+  padding-top: 5px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+.cardLabelGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.labelEdit{
+  margin: 2px 4px 0 0;
+}
+
+.cardLabel {
+  margin: 0px;
+  padding: 5px;
+}
+
+.cardLabelTitle {
+  margin: 6px auto 6px auto;
+  font-size: 18px;
+}
+
+.cardLabelText,
+.textInput, .inputDescription {
+  box-shadow: inset 2px 2px 5px #00000054, inset -2px -2px 5px #00000054;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow: auto; 
+  scrollbar-width: thin;
+  scrollbar-color: #666666 transparent;
+}
+
+.cardLabelText::-webkit-scrollbar,
+.textInput::-webkit-scrollbar,.inputDescription::-webkit-scrollbar{
+  width: 6px;
+}
+
+.cardLabelText::-webkit-scrollbar-thumb,
+.textInput::-webkit-scrollbar-thumb {
+  background-color: #666666;
+  border-radius: 3px;
+}
+
+.cardLabelText::-webkit-scrollbar-track,
+.textInput::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.cardLabelText::-moz-scrollbar,
+.textInput::-moz-scrollbar {
+  width: 6px;
+}
+
+.cardLabelText::-moz-scrollbar-thumb,
+.textInput::-moz-scrollbar-thumb {
+  background-color: #666666;
+  border-radius: 3px;
+}
+
+.cardLabelText::-moz-scrollbar-track,
+.textInput::-moz-scrollbar-track {
+  background-color: transparent;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other elements */
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1001; /* Ensure it's above the overlay */
+}
+
+.modalContainer {
+  width: 600px;
+  height: 400px;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.addCardButton{
+  display: flex;
+    align-items: center;
     cursor: pointer;
-  }
+    border-radius: 3px;
+    height: 36px;
+    padding-left: 10px;
+    min-width: 248px;
+    opacity: 0.5;
+    color: inherit;
+    background-color: inherit;
+}
+
+.editContainer {
+  padding-left: 18px;
+}
+
+.formAddlist {
+  padding-left: 10px;
+}
+
+.modalTitleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.addListContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  width: 300px;
+ 
+}
+
+.addListContent{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  height: 36px;
+  margin-right: 170px;
+}
+
+.addListFormContainer{
+  margin-right: 20px;
+  padding-right: 20px;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #a9b3bb;  
+  border-radius: 3px;
+  width: 300px;
+  padding: 8px;
+  margin-right: 8px;
+  height: 100%;
+}
+

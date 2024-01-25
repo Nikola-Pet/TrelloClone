@@ -2,10 +2,11 @@
 import React, {Component} from "react";
 import TrelloList from "./TrelloList";
 import { connect } from "react-redux";
-import TrelloActonButton from "./TrelloActionButton";
 import {DragDropContext} from "react-beautiful-dnd";
 import { sort } from "../actions";
 import styled from "styled-components";
+import TrelloAddListButton from "./TrelloAddListButton";
+
 
 const ListContainer = styled.div`
   display: flex;
@@ -52,7 +53,7 @@ class App extends Component{
         {lists.map(list => (
           <TrelloList listID = {list.id} key={list.id} title={list.title} cards={list.cards} placeholderData={this.state.placeholderData}/>
         ))}
-       <TrelloActonButton list={false} style={styles.actionBtn}/>
+       <TrelloAddListButton style={styles.actionBtn}/>
         </ListContainer>
       </div>
       </DragDropContext>

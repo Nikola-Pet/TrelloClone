@@ -1,142 +1,248 @@
-import React  from "react";
-import AddIcon from '@mui/icons-material/Add';
-import { Button, Card, Icon } from "@mui/material";
-import TextareaAutosize from 'react-textarea-autosize';
+import React from "react";
+import AddIcon from "@mui/icons-material/Add";
+import TextareaAutosize from "react-textarea-autosize";
 import { connect } from "react-redux";
-import {addList, addCard} from "../actions";
+import { addList, addCard } from "../actions";
+import CardCSS from "../styles/Card.module.css";
+import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
 
-
+const currentDate = new Date().toISOString().split("T")[0];
+const formatDate = (date) => {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${day}.${month}.${year}`;
+};
 
 class TrelloActonButton extends React.Component {
+  state = {
+    formOpen: false,
+  };
 
-    state = {
-        formOpen: false
+  openForm = () => {
+    this.setState({
+      formOpen: true,
+    });
+  };
+
+  closeForm = (e) => {
+    this.setState({
+      formOpen: false,
+    });
+  };
+
+  handleInputChangeDescription = (e) => {
+    this.setState({
+      text: e.target.value,
+    });
+  };
+
+  handleInputChangeTitle = (e) => {
+    this.setState({
+      title: e.target.value,
+    });
+  };
+
+  handleInputChangePriority = (e) => {
+    this.setState({
+      priority: e.target.value,
+    });
+  };
+
+  handleInputChangeStoryPoints = (e) => {
+    this.setState({
+      storyPoints: e.target.value,
+    });
+  };
+
+  handleInputChangeDueDate = (e) => {
+    this.setState({
+      dueDate: e.target.value,
+    });
+  };
+
+  currentDueDate = (e) => {
+    this.setState({
+      dueDate: formatDate(currentDate),
+    });
+  };
+
+  handleInputChangeAssignee = (e) => {
+    this.setState({
+      assignee: e.target.value,
+    });
+  };
+
+  handleAddCard = () => {
+    const { dispatch, listID } = this.props;
+    const { text } = this.state;
+    const { title } = this.state;
+    const { priority } = this.state;
+    const { storyPoints } = this.state;
+    const { dueDate } = this.state;
+    const { assignee } = this.state;
+
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (!dueDate) {
+      dueDate = currentDate;
     }
 
-    openForm = () => {
-        this.setState({
-            formOpen: true
-        })
+    if (text && title) {
+      this.setState({
+        text: "",
+        title: "",
+        priority: "",
+        storyPoints: "",
+        dueDate: "",
+        assignee: "",
+      });
+      dispatch(
+        addCard(listID, text, title, priority, storyPoints, dueDate, assignee)
+      );
     }
+    this.closeForm();
+    return;
+  };
 
-    closeForm = e => {
-        this.setState({
-            formOpen: false
-        })
-    }
+  renderAddButton = () => {
+    const { list } = this.props;
+    console.log(list);
 
-    handleInputChange = e => {
-        this.setState({
-            text: e.target.value
-        });
-    };
+    return (
+      <div onClick={this.openForm} className={CardCSS.addCardButton}>
+        <AddIcon></AddIcon>
+        <p>Add card</p>
+      </div>
+    );
+  };
 
-    handleAddList = () => {
-        const { dispatch } = this.props;
-        const { text } = this.state;
-
-        if(text) {
-            this.setState ({
-                text: ""
-            })
-            dispatch(addList(text))
-        }
-
-        return;
-
-
-    }
-
-    handleAddCard = () => {
-        const { dispatch, listID } = this.props;
-        const { text } = this.state;
-
-        if(text) {
-            this.setState ({
-                text: ""
-            })
-            dispatch(addCard(listID, text))
-        }
-
-        return;
-    }
-
-    renderAddButton = () => {
-        const { list } = this.props;
-        console.log(list);
-        const buttonText = list ? "Add another card" : "Add another list";
-        const buttonTextOpacity = !list ? 1 : 0.5;
-        const buttonTextColor = !list ? "white" : "inherit";
-        const buttonTextBackground = !list ? "rgba(0,0,0,.15)" : "inherit";
-
-
-        return (
-            <div onClick={this.openForm} 
-            style={{...styles.openForButtonGroup, opacity: buttonTextOpacity, color: buttonTextColor, backgroundColor:buttonTextBackground}}>
-                <AddIcon></AddIcon>
-                <p>{buttonText}</p>
+  renderForm = () => {
+    //npm install react-textarea-autosize
+    return (
+      <div>
+        <div className={CardCSS.card}>
+          <div className={CardCSS.text}>
+            <div className={CardCSS.editTitle}>
+              <p className={CardCSS.labelEdit}>Title:</p>
+              <div>
+                <TextareaAutosize
+                  placeholder={"Enter a title for this card..."}
+                  autoFocus
+                  value={this.state.title}
+                  onChange={this.handleInputChangeTitle}
+                  onFocus={this.currentDueDate}
+                  className={CardCSS.inputDescription}
+                />
+              </div>
             </div>
-        );
-    };
-
-    renderForm = () => {
-        const {list} = this.props;
-        const placeholder = list ? "Enter a title for this card..." : "Enter list title...";
-        const buttonTitle = list ? "Add Card" : "Add List";
-        //npm install react-textarea-autosize
-        return (
-        <div>
-            <Card style={{overflow:"visible", minHeight:80, minWidth:272, padding:"6px 8px 2px"}}>
-            <TextareaAutosize 
-            placeholder={placeholder}
-            autoFocus 
-            onBlur={this.closeForm}
-            value={this.state.text}
-            onChange={this.handleInputChange}
-            style={{
-                resize: "none",
-                width: "100%",
-                overflow: "hidden",
-                outline: "none",
-                border: "none"
-            }}/>
-
-            </Card>
-            <div style={styles.formButtonGroup}>
-                <Button onMouseDown={ list ? this.handleAddCard : this.handleAddList}
-                 variant="contained" 
-                 style={{color:"white", backgroundColor:"#5aac44", width:"248px"}}>
-                    {buttonTitle} {" "}
-                </Button>
-                <Icon style={{marginLeft: 8, cursor:"pointer"}}>close</Icon>
+            <div className={CardCSS.editDescription}>
+              <p className={CardCSS.labelEdit}>Description:</p>
+              <div>
+                <TextareaAutosize
+                  placeholder={"Enter a description for this card..."}
+                  value={this.state.text}
+                  onChange={this.handleInputChangeDescription}
+                  className={CardCSS.inputDescription}
+                />
+              </div>
             </div>
-        </div>)
-    }
+            <div className={CardCSS.flexRow}>
+              <div>
+                <p className={CardCSS.labelEdit}>Priority:</p>
+              </div>
+              <div>
+                <select
+                  onChange={this.handleInputChangePriority}
+                  className={CardCSS.selectPriority}
+                  defaultValue={"Low"}
+                >
+                  <option className={CardCSS.selectOption} value="Low">
+                    Low
+                  </option>
+                  <option className={CardCSS.selectOption} value="Medium">
+                    Medium
+                  </option>
+                  <option className={CardCSS.selectOption} value="High">
+                    High
+                  </option>
+                  <option className={CardCSS.selectOption} value="Urgent">
+                    URGENT
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div className={CardCSS.flexRow}>
+              <div>
+                <p className={CardCSS.labelEdit}>Story Points:</p>
+              </div>
+              <div>
+                <input
+                  currentDueDate
+                  onChange={this.handleInputChangeStoryPoints}
+                  className={CardCSS.inputStoryPoints}
+                  type="number"
+                  min="1"
+                />
+              </div>
+            </div>
+            <div className={CardCSS.flexRow}>
+              <div>
+                <p className={CardCSS.labelEdit}>Due Date:</p>
+              </div>
+              <div>
+                <input
+                  className={CardCSS.inputDate}
+                  onChange={this.handleInputChangeDueDate}
+                  type="date"
+                  min={currentDate}
+                />
+              </div>
+            </div>
+            <div className={CardCSS.flexRow}>
+              <div>
+                <p className={CardCSS.labelEdit}>Assignee:</p>
+              </div>
+              <div>
+                <select
+                  onChange={this.handleInputChangeAssignee}
+                  className={CardCSS.selectPriority}
+                  defaultValue={"Low"}
+                >
+                  <option className={CardCSS.selectOption} value="No">
+                    No assignee
+                  </option>
+                  <option className={CardCSS.selectOption} value="User 1">
+                    User 1
+                  </option>
+                  <option className={CardCSS.selectOption} value="User 2">
+                    User 2
+                  </option>
+                  <option className={CardCSS.selectOption} value="User 3">
+                    User 3
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className={CardCSS.icons}>
+            <div className={CardCSS.icon} onClick={this.handleAddCard}>
+              <DoneIcon fontSize="small"></DoneIcon>
+            </div>
+            <div className={CardCSS.icon} onClick={this.closeForm}>
+              <CloseIcon fontSize="small"></CloseIcon>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
-    render() {
-        return this.state.formOpen ?  this.renderForm() : this.renderAddButton() 
-    }
+  render() {
+    return this.state.formOpen ? this.renderForm() : this.renderAddButton();
+  }
 }
 
-const styles = {
-   
-    openForButtonGroup: {
-        display: "flex",
-        alignItems: "center",
-        cursor: "pointer",
-        borderRadius: 3,
-        height: 36,
-        widht: 272,
-        paddingLeft:10,
-        minWidth: 248,
-    },
-
-    formButtonGroup:{
-        marginTop: 8,
-        display: "flex",
-        alignItems: "center",
-        width:248
-    }
-}
-
-export default connect() (TrelloActonButton);
+export default connect()(TrelloActonButton);
