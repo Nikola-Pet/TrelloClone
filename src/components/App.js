@@ -1,4 +1,3 @@
-//https://www.youtube.com/watch?v=RDQGPs7StNA&list=PLkIwB9zsYA2is0Hb-uRoDhPoSG82Hap1h&index=1
 import React, {Component} from "react";
 import TrelloList from "./TrelloList";
 import { connect } from "react-redux";

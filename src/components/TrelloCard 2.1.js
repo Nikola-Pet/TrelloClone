@@ -10,24 +10,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { TrelloShowCardModal } from "./TrelloShowCardModal";
 
-
-
-const formatDate = (date) => {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${day}.${month}.${year}`;
-};
-
 const TrelloCard = ({ cardData, index, listID, dispatch }) => {
   const [editing, setEditing] = useState(false);
   const [newText, setNewText] = useState(cardData.text);
   const [newTitle, setNewTitle] = useState(cardData.title);
-  const [newDueDate, setNewDueDate] = useState(cardData.dueDate);
-  const [newAssignee, setNewAssignee] = useState(cardData.assignee);
-  const [newPriority, setNewPriority] = useState(cardData.priority);
-  const [newStoryPoints, setNewStoryPoints] = useState(cardData.storyPoints);
   const [showModal, setShowModal] = useState(false);
   const textAreaRef = useRef(null);
   const textAreaRefTitle = useRef(null);
@@ -41,30 +27,14 @@ const TrelloCard = ({ cardData, index, listID, dispatch }) => {
   }, [cardData.title]);
 
   useEffect(() => {
-    setNewDueDate(cardData.dueDate);
-  }, [cardData.dueDate]);
-
-  useEffect(() => {
-    setNewAssignee(cardData.assignee);
-  }, [cardData.assignee]);
-
-  useEffect(() => {
-    setNewPriority(cardData.priority);
-  }, [cardData.priority]);
-
-  useEffect(() => {
-    setNewStoryPoints(cardData.storyPoints);
-  }, [cardData.storyPoints]);
-
-  useEffect(() => {
-    if (editing && newText) {
+    if (editing && newText) {  // Dodajte proveru da li je newText definisan
       textAreaRef.current.focus();
       textAreaRef.current.setSelectionRange(newText.length, newText.length);
     }
   }, [editing, newText]);
-
+  
   useEffect(() => {
-    if (editing && newTitle) {
+    if (editing && newTitle) {  // Dodajte proveru da li je newTitle definisan
       textAreaRefTitle.current.focus();
       textAreaRefTitle.current.setSelectionRange(
         newTitle.length,
@@ -74,16 +44,7 @@ const TrelloCard = ({ cardData, index, listID, dispatch }) => {
   }, [editing, newTitle]);
 
   const handleEdit = () => {
-    dispatch(
-      editCard(listID, cardData.id, {
-        newText: newText, 
-        newTitle: newTitle,
-        newDueDate: newDueDate,
-        newAssignee: newAssignee,
-        newPriority: newPriority,
-        newStoryPoints: newStoryPoints,
-      })
-    );
+    dispatch(editCard(listID, cardData.id, newText, newTitle));
     setEditing(false);
   };
 
@@ -130,64 +91,6 @@ const TrelloCard = ({ cardData, index, listID, dispatch }) => {
                       onChange={(e) => setNewText(e.target.value)}
                       ref={textAreaRef}
                     />
-                    <div>
-                      <select
-                        className={CardCSS.selectPriority}
-                        defaultValue={newPriority}
-                        onChange={(e) => setNewPriority(e.target.value)}
-                      >
-                        <option className={CardCSS.selectOption} value="Low">
-                          Low
-                        </option>
-                        <option className={CardCSS.selectOption} value="Medium">
-                          Medium
-                        </option>
-                        <option className={CardCSS.selectOption} value="High">
-                          High
-                        </option>
-                        <option className={CardCSS.selectOption} value="Urgent">
-                          URGENT
-                        </option>
-                      </select>
-                    </div>
-                    <div>
-                      <input
-                        currentDueDate
-                        onChange={(e) => setNewStoryPoints(e.target.value)}
-                        className={CardCSS.inputStoryPoints}
-                        value={newStoryPoints}
-                        type="number"
-                        min="1"
-                      />
-                    </div>
-                    <div>
-                      <input
-                        className={CardCSS.inputDate}
-                        onChange={(e) => setNewDueDate(e.target.value)}
-                        defaultValue={newDueDate}
-                        type="date"
-                      />
-                    </div>
-                    <div>
-                      <select
-                        onChange={(e) => setNewAssignee(e.target.value)}
-                        className={CardCSS.selectPriority}
-                        value={newAssignee}
-                      >
-                        <option className={CardCSS.selectOption} value="No assignee">
-                          No assignee
-                        </option>
-                        <option className={CardCSS.selectOption} value="User 1">
-                          User 1
-                        </option>
-                        <option className={CardCSS.selectOption} value="User 2">
-                          User 2
-                        </option>
-                        <option className={CardCSS.selectOption} value="User 3">
-                          User 3
-                        </option>
-                      </select>
-                    </div>
                   </div>
                   <div className={CardCSS.icons}>
                     <div className={CardCSS.icon} onClick={handleEdit}>
@@ -234,7 +137,7 @@ const TrelloCard = ({ cardData, index, listID, dispatch }) => {
                         <div>
                           <p
                             className={CardCSS.cardLabel}
-                          >{`${formatDate(cardData.dueDate)}`}</p>
+                          >{`${cardData.dueDate}`}</p>
                         </div>
                       </div>
                     </div>

@@ -13,13 +13,18 @@ const initialState = [
         title: "B2B",
         text: "Define project scope",
         storyPoints: 5,
-        priority: "Low",
-        assignee: "Nikola",
-        dueDate: "01-02-2024"
+        priority: "High",
+        assignee: "User 3",
+        dueDate: "2024-02-14",
       },
       {
         id: `card-${1}`,
+        title: "Identify stakeholders",
         text: "Identify key stakeholders",
+        storyPoints: 3,
+        priority: "Medium",
+        assignee: "User 1",
+        dueDate: "2024-02-16",
       },
     ],
   },
@@ -29,15 +34,30 @@ const initialState = [
     cards: [
       {
         id: `card-${2}`,
+        title: "Draft project proposal",
         text: "Draft project proposal",
+        storyPoints: 2,
+        priority: "Low",
+        assignee: "User 2",
+        dueDate: "2024-02-18",
       },
       {
         id: `card-${3}`,
+        title: "Review literature",
         text: "Review related literature",
+        storyPoints: 4,
+        priority: "Medium",
+        assignee: "User 1",
+        dueDate: "2024-02-20",
       },
       {
         id: `card-${4}`,
+        title: "Prepare project timeline",
         text: "Prepare project timeline",
+        storyPoints: 3,
+        priority: "High",
+        assignee: "User 3",
+        dueDate: "2024-02-22",
       },
     ],
   },
@@ -47,11 +67,21 @@ const initialState = [
     cards: [
       {
         id: `card-${5}`,
+        title: "Conduct research",
         text: "Conduct initial research",
+        storyPoints: 5,
+        priority: "High",
+        assignee: "User 3",
+        dueDate: "2024-02-24",
       },
       {
         id: `card-${6}`,
+        title: "Gather requirements",
         text: "Gather project requirements",
+        storyPoints: 3,
+        priority: "Medium",
+        assignee: "User 2",
+        dueDate: "2024-02-26",
       },
     ],
   },
@@ -61,11 +91,21 @@ const initialState = [
     cards: [
       {
         id: `card-${7}`,
+        title: "Create wireframe",
         text: "Create project wireframe",
+        storyPoints: 4,
+        priority: "Medium",
+        assignee: "User 1",
+        dueDate: "2024-02-28",
       },
       {
         id: `card-${8}`,
+        title: "Design prototype",
         text: "Design project prototype",
+        storyPoints: 4,
+        priority: "Medium",
+        assignee: "User 1",
+        dueDate: "2024-03-02",
       },
     ],
   },
@@ -75,7 +115,12 @@ const initialState = [
     cards: [
       {
         id: `card-${9}`,
+        title: "Complete documentation",
         text: "Complete project documentation",
+        storyPoints: 3,
+        priority: "Low",
+        assignee: "User 2",
+        dueDate: "2024-03-04",
       },
     ],
   },
@@ -85,11 +130,21 @@ const initialState = [
     cards: [
       {
         id: `card-${10}`,
+        title: "Conduct review meeting",
         text: "Conduct project review meeting",
+        storyPoints: 4,
+        priority: "Medium",
+        assignee: "User 1",
+        dueDate: "2024-03-06",
       },
       {
         id: `card-${11}`,
+        title: "Revise project",
         text: "Revise project based on feedback",
+        storyPoints: 3,
+        priority: "Low",
+        assignee: "User 2",
+        dueDate: "2024-03-08",
       },
     ],
   },
@@ -99,14 +154,16 @@ const initialState = [
     cards: [
       {
         id: `card-${12}`,
+        title: "Deploy to production",
         text: "Deploy project to production",
+        storyPoints: 5,
+        priority: "High",
+        assignee: "User 3",
+        dueDate: "2024-03-10",
       },
     ],
   },
 ];
-
-
-
 
 const listReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -119,73 +176,74 @@ const listReducer = (state = initialState, action) => {
       listID += 1;
       return [...state, newList];
 
-      case CONSTANTS.DELETE_CARD: {
-        const newState = state.map((list) => {
-          if (list.id === action.payload.listID) {
-            
-            return {
+    case CONSTANTS.DELETE_CARD: {
+      const newState = state.map((list) => {
+        if (list.id === action.payload.listID) {
+          return {
+            ...list,
+            cards: list.cards.filter(
+              (card) => card.id !== action.payload.cardID
+            ),
+          };
+        } else {
+          return list;
+        }
+      });
+      return newState;
+    }
+
+    case CONSTANTS.DELETE_LIST: {
+      const { listID } = action.payload;
+      const newState = state.filter((list) => list.id !== listID);
+      return newState;
+    }
+
+    case CONSTANTS.EDIT_CARD: {
+      const {
+        listID,
+        cardID,
+        newText,
+        newTitle,
+        newDueDate,
+        newAssignee,
+        newPriority,
+        newStoryPoints,
+      } = action.payload;
+
+      return state.map((list) =>
+        list.id === listID
+          ? {
               ...list,
-              cards: list.cards.filter((card) => card.id !== action.payload.cardID),
-              
-            };
-          } else {
-            return list;
-          }
-        });
-        return newState;
-      }
-     
-/*       case CONSTANTS.EDIT_CARD1: {
-        const newState = state.map((list) => {
-          if (list.id === action.payload.listID) {
-            return {
-              ...list,
-              cards: list.cards.map((card) => {
-                if (card.id === action.payload.cardID) {
-                  return {
-                    ...card,
-                    text: action.payload.newText,
-                    title: action.payload.newTitle,
-                  };
-                } else {
-                  return card;
-                }
-              }),
-            };
-          } else {
-            return list;
-          }
-        });
-        return newState;
-      } */
-     
-      case CONSTANTS.EDIT_CARD: {
-        const { listID, cardID, newText, newTitle } = action.payload;
-      
-        return state.map((list) =>
-          list.id === listID
-            ? {
-                ...list,
-                cards: list.cards.map((card) =>
-                  card.id === cardID
-                    ? { ...card, text: newText, title: newTitle }
-                    : card
-                ),
-              }
-            : list
-        );
-      }
+              cards: list.cards.map((card) =>
+                card.id === cardID
+                  ? {
+                      ...card,
+                      text: newText,
+                      title: newTitle,
+                      dueDate: newDueDate,
+                      assignee: newAssignee,
+                      priority: newPriority,
+                      storyPoints: newStoryPoints,
+                    }
+                  : card
+              ),
+            }
+          : list
+      );
+    }
 
     case CONSTANTS.ADD_CARD: {
-
-      if(!action.payload.priority){
-        action.payload.priority = "Low"
+      if (!action.payload.priority) {
+        action.payload.priority = "Low";
       }
 
-      if(!action.payload.assignee){
-        action.payload.priority = "No"
+      if (!action.payload.assignee) {
+        action.payload.assignee = "No assignee";
       }
 
+      if (!action.payload.storyPoints) {
+        action.payload.storyPoints = "0";
+      }
 
       const newCard = {
         text: action.payload.text,
@@ -193,7 +251,7 @@ const listReducer = (state = initialState, action) => {
         priority: action.payload.priority,
         storyPoints: action.payload.storyPoints,
         dueDate: action.payload.dueDate,
-        assignee : action.payload.assignee,
+        assignee: action.payload.assignee,
         id: `card-${cardID}`,
       };
       cardID += 1;

@@ -22,7 +22,7 @@ export const TrelloShowCardModal = ({
               <p>{title}</p>
               <div>
                 <p>
-                  Description: <br></br> {description}
+                  {description}
                 </p>
               </div>
             </div>

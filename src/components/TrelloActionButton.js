@@ -2,7 +2,7 @@ import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import TextareaAutosize from "react-textarea-autosize";
 import { connect } from "react-redux";
-import { addList, addCard } from "../actions";
+import { addCard } from "../actions";
 import CardCSS from "../styles/Card.module.css";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
@@ -84,11 +84,7 @@ class TrelloActonButton extends React.Component {
     const { dueDate } = this.state;
     const { assignee } = this.state;
 
-    const currentDate = new Date().toISOString().split("T")[0];
-
-    if (!dueDate) {
-      dueDate = currentDate;
-    }
+   
 
     if (text && title) {
       this.setState({
@@ -198,6 +194,7 @@ class TrelloActonButton extends React.Component {
                   onChange={this.handleInputChangeDueDate}
                   type="date"
                   min={currentDate}
+                  defaultValue={currentDate}
                 />
               </div>
             </div>
@@ -209,9 +206,9 @@ class TrelloActonButton extends React.Component {
                 <select
                   onChange={this.handleInputChangeAssignee}
                   className={CardCSS.selectPriority}
-                  defaultValue={"Low"}
+                  defaultValue={"No assignee"}
                 >
-                  <option className={CardCSS.selectOption} value="No">
+                  <option className={CardCSS.selectOption} value="No assignee">
                     No assignee
                   </option>
                   <option className={CardCSS.selectOption} value="User 1">

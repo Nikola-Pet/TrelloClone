@@ -6,6 +6,12 @@ export const addList = title => {
         payload: title
     };
 };
+export const deleteList = (listID) => {
+    return {
+      type: CONSTANTS.DELETE_LIST,
+      payload: {listID},
+    };
+  };
 
 export const sort = (
     droppableIdStart,
